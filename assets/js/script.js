@@ -1,12 +1,25 @@
+var date = moment();
+
 var timeBlockValues = [
-    {time:'7  AM  ',input:'',id:'A'},{time:'8  AM  ',input:'',id:'B'},{time:'9  AM  ',input:'',id:'C'},{time:'10AM  ',input:'',id:'D'},
-    {time:'11AM  ',input:'',id:'E'},{time:'12PM  ',input:'',id:'F'},{time:'1  PM  ',input:'',id:'G'},{time:'2  PM  ',input:'',id:'H'},
-    {time:'3  PM  ',input:'',id:'I'},{time:'4  PM  ',input:'',id:'J'},{time:'5  PM  ',input:'',id:'K'},{time:'6  PM  ',input:'',id:'L'},{time:'7  PM  ',input:'',id:'M'}
+    {time:'7  AM  ',input:'',id:'A',moment: moment(date, 'H').set('hour', 7), hour: 7},
+    {time:'8  AM  ',input:'',id:'B',moment: moment(date, 'H').set('hour', 8), hour: 8},
+    {time:'9  AM  ',input:'',id:'C',moment: moment(date, 'H').set('hour', 9), hour: 9},
+    {time:'10AM  ',input:'',id:'D',moment: moment(date, 'H').set('hour', 10), hour: 10},
+    {time:'11AM  ',input:'',id:'E',moment: moment(date, 'H').set('hour', 11), hour: 11},
+    {time:'12PM  ',input:'',id:'F',moment: moment(date, 'H').set('hour', 12), hour: 12},
+    {time:'1  PM  ',input:'',id:'G',moment: moment(date, 'H').set('hour', 13), hour: 13},
+    {time:'2  PM  ',input:'',id:'H',moment: moment(date, 'H').set('hour', 14), hour: 14},
+    {time:'3  PM  ',input:'',id:'I',moment: moment(date, 'H').set('hour', 15), hour: 15},
+    {time:'4  PM  ',input:'',id:'J',moment: moment(date, 'H').set('hour', 16), hour: 16},
+    {time:'5  PM  ',input:'',id:'K',moment: moment(date, 'H').set('hour', 17), hour: 17},
+    {time:'6  PM  ',input:'',id:'L',moment: moment(date, 'H').set('hour', 18), hour: 18},
+    {time:'7  PM  ',input:'',id:'M',moment: moment(date, 'H').set('hour', 19), hour: 19}
 ];
 
 var startUp = function() {
     currentDayEl();
     timeBlocks();
+    auditBlocks();
 };
 
 var currentDayEl = function() {
@@ -24,25 +37,34 @@ var timeBlocks = function() {
              .addClass('row time-block')
              // add p, textarea and button elements to div
              .html('<p class="hour">' + timeBlockValues[i].time + '</p>'
-                    + '<textarea class="description" />'              
+                    + '<textarea class="description future" id="input' + timeBlockValues[i].id + '"/>'              
                     + '<button class="saveBtn" id="btn' + timeBlockValues[i].id + '"></button>'
              )         
      
         timeBlockEl.append(blockEl);
     }
-};           
-  
+}; 
+
+// color code blocks
+var auditBlocks = function() {
+    
+    for (i=0; i < timeBlockValues.length; i++){
+        
+        // set time (hour) to timeBlockValue[i].hour    
+        var time = moment(date, 'H').set('hour', timeBlockValues[i].hour);
+
+        // if time is current hour
+        if (moment(date, 'H').isSame(time)) {
+            $('#input' + timeBlockValues[i].id).removeClass('future')
+            $('#input' + timeBlockValues[i].id).addClass('present'); 
+        }
+
+        // if time is in the past
+        else if (moment().isAfter(timeBlockValues[i].moment)) {
+            $('#input' + timeBlockValues[i].id).removeClass('future present');
+            $('#input' + timeBlockValues[i].id).addClass('past'); 
+        }
+    }
+};
 
 startUp();
-
-
-
-
-
-
-// if (moment().isAfter(time)) {
-//     $(taskEl).addClass('list-group-item-danger');
-//   }
-//   else if (Math.abs(moment().diff(time, 'days')) <= 2) {
-//     $(taskEl).addClass('list-group-item-warning');
-//   }
