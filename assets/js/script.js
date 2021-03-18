@@ -23,12 +23,14 @@ var startUp = function() {
 };
 
 var currentDayEl = function() {
+    // view current date in header
     $('#currentDay').text(moment().format('dddd LL'));
     return;
 };
 
 var timeBlocks = function() {
-    for (i=0; i < timeBlockValues.length; i++) {
+    // loop timeBlockValues to set appropriate amount of blocks
+    $.each (timeBlockValues, function(i) {
 
         var timeBlockEl = $('.container');
 
@@ -40,15 +42,16 @@ var timeBlocks = function() {
                     + '<textarea class="description future" id="input' + timeBlockValues[i].id + '"/>'              
                     + '<button class="saveBtn" id="btn' + timeBlockValues[i].id + '"></button>'
              )         
-     
+        
+        // append blocks to container
         timeBlockEl.append(blockEl);
-    }
+    });
 }; 
 
 // color code blocks
 var auditBlocks = function() {
-    
-    for (i=0; i < timeBlockValues.length; i++){
+    // loop through blocks to see if past, current or future
+    $.each (timeBlockValues, function(i) {
         
         // set time (hour) to timeBlockValue[i].hour    
         var time = moment(date, 'H').set('hour', timeBlockValues[i].hour);
@@ -64,7 +67,7 @@ var auditBlocks = function() {
             $('#input' + timeBlockValues[i].id).removeClass('future present');
             $('#input' + timeBlockValues[i].id).addClass('past'); 
         }
-    }
+    });
 };
 
 startUp();
