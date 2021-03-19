@@ -16,13 +16,6 @@ var timeBlockValues = [
     {time:'7  PM  ',input:'',id:'M',moment: moment(date, 'H').set('hour', 19), hour: 19}
 ];
 
-var startUp = function() {
-    currentDayEl();
-    timeBlocks();
-    auditBlocks();
-    loadTasks();
-};
-
 var currentDayEl = function() {
     // view current date in header
     $('#currentDay').text(moment().format('dddd LL'));
@@ -86,8 +79,16 @@ var saveTask = function() {
     localStorage.setItem('blockInput', JSON.stringify(timeBlockValues));
 };
 
-// start program
-startUp();
+// check time every five minutes to update color code 
+setInterval(function() {
+    auditTask();
+}, (1000*60)*5);
+
+// run functions
+currentDayEl();
+timeBlocks();
+auditBlocks();
+loadTasks();
 
 // on click of save button save task 
 $('.saveBtn').on('click', saveTask);
