@@ -20,12 +20,21 @@ var startUp = function() {
     currentDayEl();
     timeBlocks();
     auditBlocks();
+    loadTasks();
 };
 
 var currentDayEl = function() {
     // view current date in header
     $('#currentDay').text(moment().format('dddd LL'));
     return;
+};
+
+var loadTasks = function() {
+    var tasks = JSON.parse(localStorage.getItem('blockInput'));
+    
+    $.each (tasks, function(i) {
+        $('#input' + timeBlockValues[i].id).val(tasks[i].input);
+    });
 };
 
 var timeBlocks = function() {
@@ -40,7 +49,7 @@ var timeBlocks = function() {
              // add p, textarea and button elements to div
              .html('<p class="hour">' + timeBlockValues[i].time + '</p>'
                     + '<textarea class="description future" id="input' + timeBlockValues[i].id + '"/>'              
-                    + '<button class="saveBtn" id="btn' + timeBlockValues[i].id + '"></button>'
+                    + '<button class="saveBtn" id="btn' + timeBlockValues[i].id + '"><span class="oi oi-file"></span></button>'
              )         
         
         // append blocks to container
@@ -70,4 +79,15 @@ var auditBlocks = function() {
     });
 };
 
+var saveTask = function() {
+    $.each (timeBlockValues, function(i) {
+        timeBlockValues[i].input = $('#input' + timeBlockValues[i].id).val();
+    });
+    localStorage.setItem('blockInput', JSON.stringify(timeBlockValues));
+};
+
+// start program
 startUp();
+
+// on click of save button save task 
+$('.saveBtn').on('click', saveTask);
